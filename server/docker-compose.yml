@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  postgresql:
+    image: postgres:latest
+    container_name: scdb
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes:
+      - ./data/postgresql/:/var/lib/postgresql/data
