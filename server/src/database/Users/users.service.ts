@@ -17,12 +17,19 @@ export class UsersService {
     return this.usersRepository.findOne<Users>({ where: { id } });
   }
 
+  async findUserByNickname(nickname: string): Promise<Users> {
+    return this.usersRepository.findOne<Users>({ where: { nickname } });
+  }
+
+  async findUserByDeviceId(deviceId: string): Promise<Users> {
+    return this.usersRepository.findOne<Users>({ where: { deviceId } });
+  }
+
   async create(data: CreateUserDto): Promise<Users> {
     const isNicknameUnique = await this.usersRepository.findOne<Users>({
       where: { nickname: data.nickname },
     });
     if (isNicknameUnique) {
-      console.log('exist');
       throw new HttpException('Username is taken', HttpStatus.BAD_REQUEST);
     }
     return this.usersRepository.create<Users>({
