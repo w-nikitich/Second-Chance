@@ -20,6 +20,7 @@ type RootStackParamList = {
 interface IState {
   deviceId: string,
   nickname: string,
+  isError: boolean,
 }
 
 type NavigationProp = StackNavigationProp<RootStackParamList, "Registration">;
@@ -33,6 +34,7 @@ export default function Registration() {
   const [state, setState] = useState<IState>({
     deviceId: '',
     nickname: '',
+    isError: false,
   });
 
   const registerGuest = async () => {
@@ -59,10 +61,14 @@ export default function Registration() {
   }
 
   const register = async () => {
-    await registerGuest();
-    const res = await registerUser({deviceId: state.deviceId, nickname: state.nickname})
-    console.log(res)
-    console.log('hello')
+    try {
+      await registerGuest();
+      const res = await registerUser({deviceId: state.deviceId, nickname: state.nickname})
+      updateState({isError: false})
+    }
+    catch (error) {
+      updateState({isError: true})
+    }
   };
 
   return (
@@ -83,6 +89,7 @@ export default function Registration() {
         <View style={styles.formContainer}>
           <Text style={styles.titleText}>Enter your nickname</Text>
           <Input placeholder={"Nickname"} changeHandler={changeHandler}/>
+          {state.isError && <Text style={styles.alertSmallText}>Username is taken</Text>}
         </View>
         <Button onPressHandler={register} />
       </View>

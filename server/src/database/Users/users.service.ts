@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateUserDto } from './create-user.dto';
 import { Users } from '../models/users.entity';
 
@@ -18,6 +18,13 @@ export class UsersService {
   }
 
   async create(data: CreateUserDto): Promise<Users> {
+    const isNicknameUnique = await this.usersRepository.findOne<Users>({
+      where: { nickname: data.nickname },
+    });
+    if (isNicknameUnique) {
+      console.log('exist');
+      throw new HttpException('Username is taken', HttpStatus.BAD_REQUEST);
+    }
     return this.usersRepository.create<Users>({
       nickname: data.nickname,
       deviceId: data.deviceId,

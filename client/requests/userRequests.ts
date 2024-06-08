@@ -6,9 +6,8 @@ export const registerUser = async ({ deviceId, nickname }: any) => {
       deviceId,
       nickname,
     });
-    console.log('ff')
-    console.log(res.data)
-    return res.data
+    console.log(res)
+    return res
   } catch (error) {
     console.error(error);
     throw error
