@@ -5,7 +5,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as styleConstants from "../constants/styleConstants";
 import * as images from "../constants/imageConstants";
 import { styles } from "../styles/styles";
-import mainImage from '../assets/images/mainImage.png'
 
 export default function Splash() {
   return (
@@ -21,7 +20,7 @@ export default function Splash() {
         </View>
 
         <View style={styles.bottomView}>
-          <Image source={mainImage} style={styles.mainImage} resizeMode='contain'/>
+          <Image source={images.mainImage} style={styles.mainImage}/>
         </View>
       </View>
     </SafeAreaView>
