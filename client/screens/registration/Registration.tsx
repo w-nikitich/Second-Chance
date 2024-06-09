@@ -23,10 +23,7 @@ interface IState {
   isError: boolean,
 }
 
-type NavigationProp = StackNavigationProp<RootStackParamList, "Registration">;
-
-export default function Registration() {
-  const navigation = useNavigation<NavigationProp>();
+export default function Registration({navigation}: any) {
 
   // LOCAL STATE UPDATE
   const updateState = (newState: Partial<IState>): void =>
@@ -41,9 +38,7 @@ export default function Registration() {
     const uniqueId =
       Device.osBuildId || Device.osInternalBuildId || Device.deviceName;
     if (uniqueId) {
-      const guestData = { guestId: uniqueId };
-
-      await SecureStore.setItemAsync("guestData", JSON.stringify(guestData));
+      await SecureStore.setItemAsync("guestData", uniqueId);
 
       console.log(
         "Registration Successful",
@@ -63,12 +58,13 @@ export default function Registration() {
   const register = async () => {
     try {
       await registerGuest();
-      const res = await registerUser({deviceId: state.deviceId, nickname: state.nickname})
+      await registerUser({deviceId: state.deviceId, nickname: state.nickname})
       updateState({isError: false})
+      navigation.navigate('MainScreen')
     }
     catch (error) {
+      console.log(error)
       updateState({isError: true})
-
     }
   };
 

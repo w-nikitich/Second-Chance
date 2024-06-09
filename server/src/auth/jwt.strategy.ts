@@ -16,6 +16,7 @@ export class JwtStrategy {
       const decoded = this.jwtService.verify(token, {
         secret: 'SECRET',
       });
+      console.log(decoded);
       return decoded;
     } catch (e) {
       throw new UnauthorizedException();

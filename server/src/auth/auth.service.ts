@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/database/Users/create-user.dto';
 import { UsersService } from 'src/database/Users/users.service';
@@ -22,16 +22,23 @@ export class AuthService {
       userId: dbUser.id,
     };
     const accessToken = this.jwtService.sign(payload);
+    console.log(accessToken);
     return { access_token: accessToken };
   }
 
-  async validateUser(nickname: string, deviceId: string): Promise<any> {
-    const user = await this.usersService.findUserByNickname(nickname);
-
-    if (user.deviceId === deviceId) {
-      return this.generateToken(user);
+  async getUser(deviceId: string) {
+    const user = await this.usersService.findUserByDeviceId(deviceId);
+    if (!user) {
+      throw new NotFoundException(`User not found`);
     }
-    return null;
+    return user;
+    // const accessToken = this.jwtService.sign(payload);
+    // return { access_token: accessToken };
+  }
+
+  async validateUser(deviceId: string): Promise<any> {
+    const user = await this.usersService.findUserByDeviceId(deviceId);
+    return this.generateToken(user);
   }
 
   async generateToken(user: Users) {

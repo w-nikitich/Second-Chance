@@ -12,7 +12,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule,
     forwardRef(() => UsersModule),
     JwtModule.register({
-      secret: 'SERCET',
+      secret: 'SECRET',
       signOptions: {
         expiresIn: '24h',
       },

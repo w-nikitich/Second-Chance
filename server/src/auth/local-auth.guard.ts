@@ -13,13 +13,13 @@ export class LocalAuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
-    const { nickname, deviceId } = request.body;
+    const { deviceId } = request.body;
 
-    if (!nickname && !deviceId) {
-      throw new UnauthorizedException('Username and deviceId are required');
+    if (!deviceId) {
+      throw new UnauthorizedException('deviceId are required');
     }
 
-    const user = await this.authService.validateUser(nickname, deviceId);
+    const user = await this.authService.validateUser(deviceId);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }

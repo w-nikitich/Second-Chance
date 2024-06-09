@@ -12,16 +12,20 @@ export class JwtAuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+    console.log('req', request);
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException('Token is not found');
     }
 
     try {
+      console.log('token', token);
       const decoded = await this.jwtStrategy.validate(token);
+      console.log(decoded, 'yeyeye');
       request.user = decoded;
       return true;
     } catch (error) {
+      console.log(error);
       throw new UnauthorizedException('Invalid token');
     }
   }
